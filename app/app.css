@@ -97,7 +97,7 @@ form {
   }
 
   .resume-card-header {
-    @apply flex flex-row gap-2 justify-between min-h-[110px] max-sm:flex-col items-center max-md:justify-center max-md:items-center;
+    @apply flex flex-row gap-3 justify-between min-h-[110px] items-center;
   }
 
   .feedback-section {
@@ -252,7 +252,7 @@ textarea:focus {
   }
 
   .resume-card-header {
-    @apply min-h-0;
+    @apply min-h-0 items-start;
   }
 
   .gradient-border {

@@ -12,11 +12,13 @@ const ResumeCard = ({
       className="resume-card animate-in fade-in duration-1000"
     >
       <div className="resume-card-header">
-        <div className="flex flex-col gap-2">
-          <h2 className="text-black! font-bold wrap-break-word">
+        <div className="flex min-w-0 flex-1 flex-col gap-2">
+          <h2 className="text-black! font-bold wrap-break-word max-sm:text-xl">
             {companyName}
           </h2>
-          <h3 className="text-lg wrap-break-word text-gray-500">{jobTitle}</h3>
+          <h3 className="text-lg wrap-break-word text-gray-500 max-sm:text-sm">
+            {jobTitle}
+          </h3>
         </div>
         <div className="shrink-0">
           <ScoreCircle score={feedback.overallScore} />
