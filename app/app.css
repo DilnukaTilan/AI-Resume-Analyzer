@@ -28,7 +28,7 @@ main {
   @apply min-h-screen pt-10;
 }
 h1 {
-  @apply max-sm:text-[3rem] text-6xl  text-gradient leading-tight xl:tracking-[-2px] font-semibold;
+  @apply max-sm:text-[2.5rem] text-6xl text-gradient leading-tight xl:tracking-[-2px] font-semibold;
 }
 
 h2 {
@@ -39,11 +39,11 @@ label {
   @apply text-dark-200;
 }
 input {
-  @apply w-full p-4 inset-shadow rounded-2xl focus:outline-none bg-white;
+  @apply w-full p-4 inset-shadow rounded-2xl focus:outline-none bg-white border border-transparent transition-all duration-200 ease-out;
 }
 
 textarea {
-  @apply w-full p-4 inset-shadow rounded-2xl focus:outline-none bg-white;
+  @apply w-full p-4 inset-shadow rounded-2xl focus:outline-none bg-white border border-transparent transition-all duration-200 ease-out;
 }
 
 form {
@@ -55,10 +55,10 @@ form {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-[#AB8C95] via-[#000000] to-[#8E97C5];
   }
   .gradient-border {
-    @apply bg-gradient-to-b from-light-blue-100 to-light-blue-200 p-4 rounded-2xl;
+    @apply bg-gradient-to-b from-light-blue-100 to-light-blue-200 p-4 rounded-2xl transition-all duration-300 ease-out;
   }
   .primary-button {
-    @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full;
+    @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full font-semibold shadow-sm transition-all duration-300 ease-out;
   }
   .resume-nav {
     @apply flex flex-row justify-between items-center p-4 border-b border-gray-200;
@@ -66,14 +66,14 @@ form {
   .resume-summary {
     @apply flex flex-row items-center justify-center p-4 gap-4;
     .category {
-      @apply flex flex-row gap-2 items-center bg-gray-50 rounded-2xl p-4 w-full justify-between;
+      @apply flex flex-row gap-2 items-center bg-gray-50 rounded-2xl p-4 w-full justify-between border border-transparent transition-all duration-300 ease-out;
     }
   }
   .back-button {
-    @apply flex flex-row items-center gap-2 border border-gray-200 rounded-lg p-2 shadow-sm;
+    @apply flex flex-row items-center gap-2 border border-gray-200 rounded-lg p-2 shadow-sm bg-white transition-all duration-300 ease-out;
   }
   .auth-button {
-    @apply primary-gradient rounded-full py-4 px-8 cursor-pointer w-[600px] max-md:w-full text-3xl font-semibold text-white;
+    @apply primary-gradient rounded-full py-4 px-8 cursor-pointer w-[600px] max-md:w-full text-3xl font-semibold text-white shadow-sm transition-all duration-300 ease-out;
   }
   .main-section {
     @apply flex flex-col items-center gap-8 pt-12 max-sm:mx-2 mx-15 pb-5;
@@ -82,11 +82,11 @@ form {
     @apply flex flex-col items-center gap-8 max-w-4xl text-center max-sm:gap-4;
   }
   .resumes-section {
-    @apply flex flex-wrap max-md:flex-col max-md:gap-4 gap-6 items-start max-md:items-center w-full max-w-[1850px] justify-evenly;
+    @apply grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 w-full max-w-[1400px] justify-items-center;
   }
 
   .resume-card {
-    @apply flex flex-col gap-8 h-[560px] w-[350px] lg:w-[430px] xl:w-[490px] bg-white rounded-2xl p-4;
+    @apply flex flex-col gap-8 h-[560px] max-sm:h-auto w-full max-w-[430px] sm:max-w-[350px] 2xl:max-w-[430px] bg-white rounded-2xl p-4 border border-white/70 shadow-sm overflow-hidden transition-all duration-300 ease-out;
   }
 
   .resume-card-header {
@@ -98,7 +98,7 @@ form {
   }
 
   .navbar {
-    @apply flex flex-row justify-between items-center bg-white rounded-full p-4 w-full px-10 max-w-[1200px] mx-auto;
+    @apply flex flex-row justify-between items-center bg-white rounded-full p-4 w-full px-10 max-w-[1200px] mx-auto shadow-sm transition-all duration-300 ease-out;
   }
 
   .score-badge {
@@ -110,10 +110,169 @@ form {
   }
 
   .uplader-drag-area {
-    @apply relative p-8 text-center transition-all duration-700 cursor-pointer bg-white rounded-2xl min-h-[208px];
+    @apply relative p-8 text-center transition-all duration-300 ease-out cursor-pointer bg-white rounded-2xl min-h-[208px] border border-dashed border-transparent;
   }
   .uploader-selected-file {
-    @apply flex items-center justify-between p-3 bg-gray-50 rounded-2xl;
+    @apply flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-transparent transition-all duration-300 ease-out;
+  }
+}
+
+input:focus,
+textarea:focus {
+  border-color: rgba(142, 152, 255, 0.55);
+  box-shadow:
+    0 0 0 4px rgba(142, 152, 255, 0.16),
+    inset 0 0 12px 0 rgba(36, 99, 235, 0.16);
+}
+
+.navbar a:first-child p,
+.resume-card img {
+  transition:
+    transform 300ms ease,
+    filter 300ms ease;
+}
+
+.primary-button:focus-visible,
+.auth-button:focus-visible,
+.back-button:focus-visible,
+.resume-card:focus-visible,
+.uplader-drag-area:focus-visible {
+  outline: 3px solid rgba(142, 152, 255, 0.45);
+  outline-offset: 3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .primary-button:hover,
+  .auth-button:hover {
+    background: linear-gradient(to bottom, #717dff, #4957eb);
+    box-shadow: 0 14px 28px rgba(96, 107, 235, 0.28);
+    transform: translateY(-2px);
+  }
+
+  .back-button:hover,
+  .uploader-selected-file:hover,
+  .resume-summary .category:hover {
+    border-color: rgba(142, 152, 255, 0.28);
+    box-shadow: 0 12px 28px rgba(16, 24, 40, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .navbar:hover {
+    box-shadow: 0 18px 45px rgba(16, 24, 40, 0.08);
+  }
+
+  .navbar a:first-child:hover p {
+    filter: saturate(1.2);
+    transform: translateY(-1px);
+  }
+
+  .resume-card:hover {
+    border-color: rgba(142, 152, 255, 0.32);
+    box-shadow: 0 24px 60px rgba(16, 24, 40, 0.14);
+    transform: translateY(-8px);
+  }
+
+  .resume-card:hover .gradient-border,
+  .gradient-border:hover {
+    box-shadow: inset 0 0 0 1px rgba(142, 152, 255, 0.2);
+  }
+
+  .resume-card:hover img {
+    filter: saturate(1.04) contrast(1.02);
+    transform: scale(1.025);
+  }
+
+  .uplader-drag-area:hover {
+    border-color: rgba(142, 152, 255, 0.42);
+    box-shadow: 0 18px 45px rgba(16, 24, 40, 0.1);
+    transform: translateY(-3px);
+  }
+}
+
+.primary-button:active,
+.auth-button:active,
+.back-button:active,
+.resume-card:active,
+.uplader-drag-area:active {
+  transform: translateY(0) scale(0.99);
+}
+
+@media (max-width: 640px) {
+  main {
+    @apply pt-6;
+  }
+
+  h1 {
+    @apply leading-[1.08];
+  }
+
+  h2 {
+    @apply text-lg leading-relaxed;
+  }
+
+  input,
+  textarea {
+    @apply rounded-xl p-3;
+  }
+
+  form {
+    @apply gap-5;
+  }
+
+  .navbar {
+    @apply rounded-2xl px-4 py-3 gap-3 max-w-[calc(100%-1rem)];
+  }
+
+  .navbar .primary-button {
+    @apply w-fit px-3 py-2 text-sm;
+  }
+
+  .main-section {
+    @apply gap-6 pt-8 mx-4 pb-8;
+  }
+
+  .page-heading {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .resumes-section {
+    @apply gap-4;
+  }
+
+  .resume-card {
+    @apply gap-5 p-3 rounded-xl;
+  }
+
+  .resume-card-header {
+    @apply min-h-0;
+  }
+
+  .gradient-border {
+    @apply p-2 rounded-xl;
+  }
+
+  .auth-button {
+    @apply text-xl py-3 px-5;
+  }
+
+  .uplader-drag-area {
+    @apply p-5 min-h-[168px] rounded-xl;
+  }
+
+  .uploader-selected-file {
+    @apply rounded-xl;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 
