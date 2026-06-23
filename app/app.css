@@ -67,6 +67,46 @@ form {
   .primary-button {
     @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full font-semibold shadow-sm transition-all duration-300 ease-out;
   }
+  .nav-shell {
+    @apply flex flex-row items-center gap-3 w-full max-w-[1280px] mx-auto px-4;
+  }
+  .navbar-brand {
+    @apply min-w-0 shrink;
+  }
+  .navbar-brand p {
+    @apply truncate whitespace-nowrap;
+  }
+  .nav-actions {
+    @apply flex flex-row items-center gap-3 shrink-0;
+  }
+  .profile-menu-wrap {
+    @apply relative shrink-0;
+  }
+  .profile-icon {
+    @apply flex size-16 shrink-0 items-center justify-center rounded-full bg-white p-2 shadow-sm border border-white/70 cursor-pointer transition-all duration-300 ease-out;
+  }
+  .profile-icon-inner {
+    @apply flex size-full items-center justify-center rounded-full bg-gray-50 border border-gray-200 overflow-hidden;
+  }
+  .profile-avatar {
+    @apply size-full rounded-full object-cover shrink-0;
+  }
+  .profile-initial {
+    @apply flex items-center justify-center bg-white text-lg font-bold text-[#4957eb];
+  }
+  .sign-out-button {
+    @apply rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-dark-200 cursor-pointer transition-all duration-300 ease-out;
+  }
+  .profile-menu {
+    @apply absolute right-0 top-[calc(100%+0.75rem)] z-20 flex w-52 flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm;
+    width: min(13rem, calc(100vw - 1rem));
+  }
+  .profile-menu-name {
+    @apply truncate px-2 text-sm font-semibold text-[#3b4163];
+  }
+  .profile-sign-out {
+    @apply w-full;
+  }
   .resume-nav {
     @apply flex flex-row justify-between items-center p-4 border-b border-gray-200;
   }
@@ -80,7 +120,52 @@ form {
     @apply flex flex-row items-center gap-2 border border-gray-200 rounded-lg p-2 shadow-sm bg-white transition-all duration-300 ease-out;
   }
   .auth-button {
-    @apply primary-gradient rounded-full py-4 px-8 cursor-pointer w-[600px] max-md:w-full text-3xl font-semibold text-white shadow-sm transition-all duration-300 ease-out;
+    @apply primary-gradient rounded-full py-3 px-5 cursor-pointer w-full text-base font-semibold text-white shadow-sm transition-all duration-300 ease-out disabled:opacity-70 disabled:cursor-not-allowed;
+  }
+  .auth-page {
+    @apply min-h-screen flex items-center justify-center px-4 py-8;
+  }
+  .auth-shell {
+    @apply flex flex-col items-center gap-4 w-full max-w-[430px];
+  }
+  .auth-panel {
+    @apply w-full bg-white/95 rounded-2xl p-6 shadow-sm border border-white/70 flex flex-col gap-4;
+  }
+  .auth-panel form {
+    @apply gap-4;
+  }
+  .auth-header {
+    @apply flex flex-col gap-2 text-center items-center;
+  }
+  .auth-kicker {
+    @apply text-sm font-bold uppercase tracking-[0.18em] text-dark-200;
+  }
+  .auth-toggle {
+    @apply grid grid-cols-2 gap-2 rounded-full bg-gray-50 p-1 border border-gray-200;
+  }
+  .auth-toggle button {
+    @apply rounded-full px-4 py-2 text-sm font-semibold text-dark-200 cursor-pointer transition-all duration-200 ease-out;
+  }
+  .auth-toggle button.active {
+    @apply bg-white text-[#4957eb] shadow-sm;
+  }
+  .auth-error {
+    @apply text-sm font-semibold text-red-700;
+  }
+  .auth-message {
+    @apply text-sm font-semibold text-[#254d4a];
+  }
+  .auth-divider {
+    @apply flex flex-row items-center gap-3 text-sm font-semibold text-dark-200;
+  }
+  .auth-divider span {
+    @apply h-px flex-1 bg-gray-200;
+  }
+  .google-button {
+    @apply flex flex-row items-center justify-center gap-3 rounded-full border border-gray-200 bg-white px-5 py-3 text-base font-semibold text-[#3b4163] cursor-pointer shadow-sm transition-all duration-300 ease-out disabled:opacity-70 disabled:cursor-not-allowed;
+  }
+  .google-button span {
+    @apply flex size-7 items-center justify-center rounded-full bg-white border border-gray-200 text-sm font-bold text-[#4957eb];
   }
   .main-section {
     @apply flex flex-col items-center gap-8 pt-12 max-sm:mx-2 mx-15 pb-5;
@@ -121,7 +206,7 @@ form {
   }
 
   .navbar {
-    @apply flex flex-row justify-between items-center bg-white rounded-full p-4 w-full px-10 max-w-[1200px] mx-auto shadow-sm transition-all duration-300 ease-out;
+    @apply flex flex-row justify-between items-center bg-white rounded-full p-4 w-full px-10 shadow-sm transition-all duration-300 ease-out;
   }
 
   .score-badge {
@@ -157,6 +242,9 @@ textarea:focus {
 
 .primary-button:focus-visible,
 .auth-button:focus-visible,
+.google-button:focus-visible,
+.sign-out-button:focus-visible,
+.profile-icon:focus-visible,
 .back-button:focus-visible,
 .resume-card:focus-visible,
 .uplader-drag-area:focus-visible {
@@ -173,6 +261,8 @@ textarea:focus {
   }
 
   .back-button:hover,
+  .google-button:hover,
+  .sign-out-button:hover,
   .uploader-selected-file:hover,
   .resume-summary .category:hover {
     border-color: rgba(142, 152, 255, 0.28);
@@ -182,6 +272,12 @@ textarea:focus {
 
   .navbar:hover {
     box-shadow: 0 18px 45px rgba(16, 24, 40, 0.08);
+  }
+
+  .profile-icon:hover {
+    border-color: rgba(142, 152, 255, 0.32);
+    box-shadow: 0 18px 45px rgba(16, 24, 40, 0.1);
+    transform: translateY(-2px);
   }
 
   .navbar a:first-child:hover p {
@@ -214,7 +310,10 @@ textarea:focus {
 
 .primary-button:active,
 .auth-button:active,
+.google-button:active,
+.sign-out-button:active,
 .back-button:active,
+.profile-icon:active,
 .resume-card:active,
 .uplader-drag-area:active {
   transform: translateY(0) scale(0.99);
@@ -242,12 +341,41 @@ textarea:focus {
     @apply gap-5;
   }
 
+  .nav-shell {
+    @apply px-3 gap-2 items-center;
+  }
+
   .navbar {
-    @apply rounded-2xl px-4 py-3 gap-3 max-w-[calc(100%-1rem)];
+    @apply min-w-0 rounded-2xl px-3 py-2.5 gap-2 items-center;
+  }
+
+  .navbar-brand p {
+    @apply text-xl leading-none;
+  }
+
+  .nav-actions {
+    @apply flex-nowrap justify-end gap-2;
+  }
+
+  .profile-icon {
+    @apply size-12 p-1.5;
+  }
+
+  .profile-menu {
+    @apply top-[calc(100%+0.5rem)] rounded-xl p-2 gap-2;
+    width: min(10rem, calc(100vw - 1rem));
+  }
+
+  .profile-menu-name {
+    @apply text-xs px-1;
+  }
+
+  .profile-sign-out {
+    @apply px-3 py-1.5 text-xs;
   }
 
   .navbar .primary-button {
-    @apply w-fit px-3 py-2 text-sm;
+    @apply w-fit px-3 py-2 text-xs;
   }
 
   .main-section {
@@ -276,7 +404,15 @@ textarea:focus {
   }
 
   .auth-button {
-    @apply text-xl py-3 px-5;
+    @apply text-base py-3 px-5;
+  }
+
+  .auth-panel {
+    @apply p-5 rounded-xl;
+  }
+
+  .google-button {
+    @apply py-3 px-4;
   }
 
   .uplader-drag-area {
@@ -285,6 +421,41 @@ textarea:focus {
 
   .uploader-selected-file {
     @apply rounded-xl;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav-shell {
+    @apply px-2 gap-1.5;
+  }
+
+  .navbar {
+    @apply px-2.5 py-2;
+  }
+
+  .navbar-brand p {
+    @apply text-lg;
+  }
+
+  .navbar .primary-button {
+    @apply px-2.5 py-1.5 text-[11px];
+  }
+
+  .profile-icon {
+    @apply size-11 p-1;
+  }
+
+  .profile-menu {
+    @apply p-1.5 gap-1.5 rounded-lg;
+    width: min(8.5rem, calc(100vw - 0.75rem));
+  }
+
+  .profile-menu-name {
+    @apply text-[11px] px-0.5;
+  }
+
+  .profile-sign-out {
+    @apply px-2 py-1 text-[11px];
   }
 }
 
