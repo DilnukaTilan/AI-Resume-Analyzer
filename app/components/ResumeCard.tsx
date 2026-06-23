@@ -11,18 +11,21 @@ const ResumeCard = ({
       to={`/resume/${id}`}
       className="resume-card animate-in fade-in duration-1000"
     >
-      <div className="resume-card-header">
-        <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <h2 className="text-black! font-bold wrap-break-word max-sm:text-xl">
-            {companyName}
-          </h2>
-          <h3 className="text-lg wrap-break-word text-gray-500 max-sm:text-sm">
-            {jobTitle}
-          </h3>
+      <div className="resume-card-heading">
+        <div className="resume-card-header">
+          <div className="flex flex-col gap-2">
+            <h2 className="text-black! font-bold leading-tight wrap-break-word max-sm:text-2xl!">
+              {companyName}
+            </h2>
+            <h3 className="text-lg leading-snug wrap-break-word text-gray-500 max-sm:text-sm">
+              {jobTitle}
+            </h3>
+          </div>
+          <div className="shrink-0 -mr-2.5 max-sm:mr-[-7px]">
+            <ScoreCircle score={feedback.overallScore} />
+          </div>
         </div>
-        <div className="shrink-0">
-          <ScoreCircle score={feedback.overallScore} />
-        </div>
+        <div className="resume-card-divider" aria-hidden="true" />
       </div>
       <div className="gradient-border animate-in fade-in duration-1000">
         <div className="w-full h-full">
