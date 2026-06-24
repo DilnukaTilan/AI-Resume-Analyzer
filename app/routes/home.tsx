@@ -3,6 +3,7 @@ import type { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "~/components/Navbar";
+import LoadingSpinner from "~/components/LoadingSpinner";
 import ResumeCard from "~/components/ResumeCard";
 import { resumes } from "~/constants";
 import { supabase } from "~/lib/supabase";
@@ -66,13 +67,8 @@ export default function Home() {
 
   if (isCheckingSession || !user) {
     return (
-      <main className="bg-[url('/images/bg-main.svg')] bg-cover">
-        <section className="main-section">
-          <div className="page-heading py-16">
-            <h1>Loading your workspace</h1>
-            <h2>Checking your secure session.</h2>
-          </div>
-        </section>
+      <main className="bg-[url('/images/bg-main.svg')] bg-cover flex items-center justify-center">
+        <LoadingSpinner />
       </main>
     );
   }

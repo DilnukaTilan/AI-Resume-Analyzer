@@ -503,6 +503,70 @@ textarea:focus {
   backdrop-filter: blur(10px);
 }
 
+.spinner-wrapper {
+  @apply flex flex-col items-center justify-center gap-6;
+  animation: spinnerFadeIn 0.5s ease-out both;
+}
+
+.spinner-ring {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    #4338ca 25%,
+    #6d28d9 50%,
+    #be185d 75%,
+    transparent 100%
+  );
+  animation: spinnerRotate 1s linear infinite;
+}
+
+.spinner-ring::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: white;
+}
+
+.spinner-ring-inner {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: white;
+  z-index: 1;
+}
+
+@keyframes spinnerRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinnerPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes spinnerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
