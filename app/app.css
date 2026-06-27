@@ -51,6 +51,7 @@ body {
 main {
   @apply min-h-screen pt-10;
 }
+
 h1 {
   @apply max-sm:text-[2.5rem] text-6xl text-gradient leading-tight xl:tracking-[-2px] font-semibold;
 }
@@ -62,6 +63,7 @@ h2 {
 label {
   @apply text-dark-200;
 }
+
 input,
 textarea {
   @apply w-full p-4 inset-shadow rounded-2xl focus:outline-none bg-white border border-transparent transition-all duration-200 ease-out;
@@ -75,112 +77,143 @@ form {
   .gradient-border {
     @apply bg-gradient-to-b from-light-blue-100 to-light-blue-200 p-4 rounded-2xl transition-all duration-300 ease-out;
   }
+
   .primary-button {
     @apply primary-gradient text-white rounded-full px-4 py-2 cursor-pointer w-full font-semibold shadow-sm transition-all duration-300 ease-out;
   }
+
   .nav-shell {
     @apply flex flex-row items-center gap-3 w-full max-w-[1280px] mx-auto px-4;
   }
+
   .navbar-brand {
     @apply min-w-0 shrink;
   }
+
   .navbar-brand p {
     @apply truncate whitespace-nowrap;
   }
+
   .nav-actions {
     @apply flex flex-row items-center gap-3 shrink-0;
   }
+
   .profile-menu-wrap {
     @apply relative shrink-0;
   }
+
   .profile-icon {
     @apply flex size-16 shrink-0 items-center justify-center rounded-full bg-white p-2 shadow-sm border border-white/70 cursor-pointer transition-all duration-300 ease-out;
   }
+
   .profile-icon-inner {
     @apply flex size-full items-center justify-center rounded-full bg-gray-50 border border-gray-200 overflow-hidden;
   }
+
   .profile-avatar {
     @apply size-full rounded-full object-cover shrink-0;
   }
+
   .profile-initial {
     @apply flex items-center justify-center bg-white text-lg font-bold text-primary;
   }
+
   .sign-out-button {
     @apply rounded-full border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-dark-200 cursor-pointer transition-all duration-300 ease-out;
   }
+
   .profile-menu {
     @apply absolute right-0 top-[calc(100%+0.75rem)] z-20 flex w-52 flex-col gap-3 rounded-2xl border border-gray-200 bg-white p-3 shadow-sm;
     width: min(13rem, calc(100vw - 1rem));
   }
+
   .profile-menu-name {
     @apply truncate px-2 text-sm font-semibold text-heading;
   }
+
   .profile-sign-out {
     @apply w-full;
   }
+
   .resume-nav {
     @apply flex flex-row justify-between items-center p-4 border-b border-gray-200;
   }
+
   .resume-summary {
     @apply flex flex-row items-center justify-center p-4 gap-4;
     .category {
       @apply flex flex-row gap-2 items-center bg-gray-50 rounded-2xl p-4 w-full justify-between border border-transparent transition-all duration-300 ease-out;
     }
   }
+
   .back-button {
     @apply flex flex-row items-center gap-2 border border-gray-200 rounded-lg p-2 shadow-sm bg-white transition-all duration-300 ease-out;
   }
+
   .auth-button {
     @apply primary-gradient rounded-full py-3 px-5 cursor-pointer w-full text-base font-semibold text-white shadow-sm transition-all duration-300 ease-out disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none;
   }
+
   .auth-page {
     @apply min-h-screen flex items-center justify-center px-4 py-8;
   }
+
   .auth-shell {
     @apply flex flex-col items-center gap-4 w-full max-w-[430px];
   }
+
   .auth-panel {
-    @apply w-full bg-white/95 rounded-2xl p-6 shadow-sm border border-white/70 flex flex-col gap-4;
+    @apply w-full bg-white/95 rounded-2xl p-6 shadow-sm border border-white/70 flex flex-col gap-5;
   }
-  .auth-panel form {
-    @apply gap-4;
-  }
+
   .auth-header {
     @apply flex flex-col gap-2 text-center items-center;
   }
+
   .auth-toggle {
     @apply grid grid-cols-2 gap-2 rounded-full bg-gray-50 p-1 border border-gray-200;
   }
+
   .auth-toggle button {
     @apply rounded-full px-4 py-2 text-sm font-semibold text-dark-200 cursor-pointer transition-all duration-200 ease-out;
   }
+
   .auth-toggle button.active {
     @apply bg-white text-primary shadow-sm;
   }
+
   .auth-error {
     @apply text-sm font-semibold text-red-700;
   }
+
   .auth-message {
     @apply text-sm font-semibold text-badge-green-text;
   }
+
   .auth-divider {
     @apply flex flex-row items-center gap-3 text-sm font-semibold text-dark-200;
   }
+
   .auth-divider span {
     @apply h-px flex-1 bg-gray-200;
   }
+
   .google-button {
     @apply flex flex-row items-center justify-center gap-3 rounded-full border border-gray-200 bg-white px-5 py-3 text-base font-semibold text-heading cursor-pointer shadow-sm transition-all duration-300 ease-out disabled:opacity-70 disabled:cursor-not-allowed;
   }
+
   .google-button span {
     @apply flex size-7 items-center justify-center rounded-full bg-white border border-gray-200 text-sm font-bold text-primary;
   }
+
   .main-section {
     @apply flex flex-col items-center gap-8 max-sm:mx-2 mx-15 pt-12 pb-10;
   }
+
   .page-heading {
     @apply flex flex-col items-center gap-8 max-w-4xl text-center py-12 max-sm:gap-4;
   }
+
   .resumes-section {
     @apply grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 w-full max-w-[1400px] justify-items-center;
   }
@@ -191,10 +224,6 @@ form {
 
   .upload-panel {
     @apply w-full max-w-3xl rounded-2xl border border-white/70 bg-white/95 p-6 shadow-sm;
-  }
-
-  .upload-panel form {
-    @apply gap-5;
   }
 
   .resume-card {
@@ -320,7 +349,6 @@ textarea:focus {
     filter: saturate(1.04) contrast(1.02);
     transform: scale(1.025);
   }
-
 }
 
 .primary-button:active,
