@@ -1,6 +1,7 @@
 import type { Route } from "./+types/auth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import PageLayout from "~/components/PageLayout";
 import { supabase } from "~/lib/supabase";
 
 type AuthMode = "signin" | "signup";
@@ -97,7 +98,7 @@ export default function Auth() {
   };
 
   return (
-    <main className="auth-page bg-[url('/images/bg-auth.svg')] bg-cover">
+    <PageLayout variant="auth" className="auth-page">
       <section className="auth-shell">
         <div className="auth-header">
           <h1>{mode === "signup" ? "Create Your Account" : "Welcome Back"}</h1>
@@ -194,6 +195,6 @@ export default function Auth() {
           </button>
         </div>
       </section>
-    </main>
+    </PageLayout>
   );
 }

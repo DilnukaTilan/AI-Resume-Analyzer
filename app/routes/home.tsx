@@ -3,6 +3,7 @@ import type { User } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import Navbar from "~/components/Navbar";
+import PageLayout from "~/components/PageLayout";
 import LoadingSpinner from "~/components/LoadingSpinner";
 import ResumeCard from "~/components/ResumeCard";
 import { resumes } from "~/constants";
@@ -67,17 +68,17 @@ export default function Home() {
 
   if (isCheckingSession || !user) {
     return (
-      <main className="bg-[url('/images/bg-main.svg')] bg-cover flex items-center justify-center">
+      <PageLayout className="flex items-center justify-center">
         <LoadingSpinner />
-      </main>
+      </PageLayout>
     );
   }
 
   return (
-    <main className="bg-[url('/images/bg-main.svg')] bg-cover">
+    <PageLayout>
       <Navbar user={user} onSignOut={handleSignOut} />
       <section className="main-section">
-        <div className="page-heading py-16">
+        <div className="page-heading">
           <h1>Track Your Applications & Resume Ratings</h1>
           <h2>Review your submissions and check AI-powered feedback.</h2>
         </div>
@@ -90,6 +91,6 @@ export default function Home() {
           </div>
         )}
       </section>
-    </main>
+    </PageLayout>
   );
 }
