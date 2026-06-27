@@ -131,7 +131,7 @@ form {
     @apply flex flex-row items-center gap-2 border border-gray-200 rounded-lg p-2 shadow-sm bg-white transition-all duration-300 ease-out;
   }
   .auth-button {
-    @apply primary-gradient rounded-full py-3 px-5 cursor-pointer w-full text-base font-semibold text-white shadow-sm transition-all duration-300 ease-out disabled:opacity-70 disabled:cursor-not-allowed;
+    @apply primary-gradient rounded-full py-3 px-5 cursor-pointer w-full text-base font-semibold text-white shadow-sm transition-all duration-300 ease-out disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none;
   }
   .auth-page {
     @apply min-h-screen flex items-center justify-center px-4 py-8;
@@ -197,22 +197,6 @@ form {
     @apply gap-5;
   }
 
-  .upload-dropzone {
-    @apply flex w-full flex-col items-center justify-center gap-2 border-gray-200;
-  }
-
-  .upload-dropzone-title {
-    @apply max-w-full truncate text-base font-semibold text-heading;
-  }
-
-  .upload-dropzone-copy {
-    @apply text-sm text-dark-200;
-  }
-
-  .upload-file-input {
-    @apply sr-only;
-  }
-
   .resume-card {
     @apply flex flex-col gap-5 h-[560px] max-sm:h-auto w-full max-w-[430px] sm:max-w-[350px] 2xl:max-w-[430px] bg-white rounded-2xl p-4 border border-white/70 shadow-sm overflow-hidden transition-all duration-300 ease-out;
   }
@@ -253,12 +237,8 @@ form {
     @apply flex flex-col gap-2 w-full items-start;
   }
 
-  .uploader-drag-area,
-  .uplader-drag-area {
-    @apply relative p-8 text-center transition-all duration-300 ease-out cursor-pointer bg-white rounded-2xl min-h-[208px] border border-dashed border-transparent;
-  }
   .uploader-selected-file {
-    @apply flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-transparent transition-all duration-300 ease-out;
+    @apply flex items-center justify-between gap-2 sm:gap-3 p-2.5 sm:p-3 bg-gray-50 rounded-2xl border border-transparent transition-all duration-300 ease-out;
   }
 }
 
@@ -283,21 +263,14 @@ textarea:focus {
 .sign-out-button:focus-visible,
 .profile-icon:focus-visible,
 .back-button:focus-visible,
-.resume-card:focus-visible,
-.uploader-drag-area:focus-visible,
-.uplader-drag-area:focus-visible {
-  outline: var(--ring-focus);
-  outline-offset: var(--ring-focus-offset);
-}
-
-.upload-file-input:focus-visible + .upload-dropzone {
+.resume-card:focus-visible {
   outline: var(--ring-focus);
   outline-offset: var(--ring-focus-offset);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .primary-button:hover,
-  .auth-button:hover {
+  .auth-button:not(:disabled):hover {
     background: linear-gradient(
       to bottom,
       var(--color-primary-hover-light),
@@ -348,23 +321,15 @@ textarea:focus {
     transform: scale(1.025);
   }
 
-  .uploader-drag-area:hover,
-  .uplader-drag-area:hover {
-    border-color: rgba(142, 152, 255, 0.42);
-    box-shadow: var(--shadow-surface-hover);
-    transform: translateY(-3px);
-  }
 }
 
 .primary-button:active,
-.auth-button:active,
+.auth-button:not(:disabled):active,
 .google-button:active,
 .sign-out-button:active,
 .back-button:active,
 .profile-icon:active,
-.resume-card:active,
-.uploader-drag-area:active,
-.uplader-drag-area:active {
+.resume-card:active {
   transform: translateY(0) scale(0.99);
 }
 
@@ -462,11 +427,6 @@ textarea:focus {
 
   .google-button {
     @apply py-3 px-4;
-  }
-
-  .uploader-drag-area,
-  .uplader-drag-area {
-    @apply p-5 min-h-[168px] rounded-xl;
   }
 
   .upload-section {

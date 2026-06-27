@@ -1,7 +1,7 @@
 import PageLayout from "~/components/PageLayout";
 import type { Route } from "./+types/upload";
 import type { User } from "@supabase/supabase-js";
-import { type FormEvent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import LoadingSpinner from "~/components/LoadingSpinner";
 import Navbar from "~/components/Navbar";
@@ -24,6 +24,8 @@ export default function Upload() {
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
   const [statusText, setStatusText] = useState("");
+  const [file, setFile] = useState<File | null>(null);
+  const [fileError, setFileError] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -78,7 +80,26 @@ export default function Upload() {
     );
   }
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {};
+  const handleFileSelect = (file: File | null) => {
+    setFile(file);
+    setFileError("");
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const companyName = String(formData.get("companyName") ?? "").trim();
+    const jobTitle = String(formData.get("jobTitle") ?? "").trim();
+    const jobDescription = String(formData.get("jobDescription") ?? "").trim();
+
+    if (!file) {
+      setFileError("Please upload your resume as a PDF before continuing.");
+      return;
+    }
+
+    console.log({ companyName, jobTitle, jobDescription, file });
+  };
 
   return (
     <PageLayout>
@@ -89,7 +110,11 @@ export default function Upload() {
           {isProcessing ? (
             <>
               <h2>{statusText}</h2>
-              <img src="/images/resume-scan.gif" className="w-full" />
+              <img
+                src="/images/resume-scan.gif"
+                alt="Scanning resume"
+                className="w-full"
+              />
             </>
           ) : (
             <h2>Drop your resume for an ATS score and improvement tips.</h2>
@@ -131,10 +156,19 @@ export default function Upload() {
               </div>
               <div className="form-div">
                 <label htmlFor="resume-file">Upload Resume</label>
-                <FileUploader />
+                <FileUploader
+                  id="resume-file"
+                  error={fileError}
+                  disabled={isProcessing}
+                  onFileSelect={handleFileSelect}
+                />
               </div>
 
-              <button type="submit" className="auth-button">
+              <button
+                type="submit"
+                className="auth-button"
+                disabled={isProcessing}
+              >
                 Save & Analyze Resume
               </button>
             </form>
