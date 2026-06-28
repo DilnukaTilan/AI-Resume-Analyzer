@@ -23,8 +23,6 @@ const STORAGE_BUCKET = "resumes";
 
 type AnalyzeActionResponse = { feedback: Feedback } | { error: string };
 
-
-
 function sanitizeFileName(fileName: string) {
   return fileName.replace(/[^a-z0-9._-]/gi, "-").toLowerCase();
 }
@@ -193,8 +191,6 @@ export default function Upload() {
         );
       }
 
-      console.log("feedback:", analysis.feedback);
-
       const { error: updateError } = await supabase
         .from("resumes")
         .update({ feedback: analysis.feedback })
@@ -204,6 +200,7 @@ export default function Upload() {
       if (updateError) throw new Error(updateError.message);
 
       setStatusText("Analysis complete, redirecting...");
+      await new Promise((r) => setTimeout(r, 1500));
       navigate(`/resume/${uuid}`);
     } catch (error) {
       setStatusText(
