@@ -7,6 +7,8 @@ import LoadingSpinner from "~/components/LoadingSpinner";
 import Navbar from "~/components/Navbar";
 import { supabase } from "~/lib/supabase";
 import FileUploader from "~/components/FileUploader";
+import { convertPdfToImage } from "~/lib/pdf2img";
+import { analyzeResumeWithOpenAI } from "~/lib/openai.server";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -16,6 +18,90 @@ export function meta({}: Route.MetaArgs) {
       content: "Upload a resume and save application details.",
     },
   ];
+}
+
+const STORAGE_BUCKET = "resumes";
+
+type AnalyzeActionResponse = { feedback: Feedback } | { error: string };
+
+export async function action({ request }: Route.ActionArgs) {
+  const accessToken = request.headers
+    .get("Authorization")
+    ?.replace("Bearer ", "");
+
+  if (!accessToken) {
+    return Response.json(
+      { error: "You must be signed in to analyze a resume." },
+      { status: 401 },
+    );
+  }
+
+  const {
+    data: { user },
+    error: authError,
+  } = await supabase.auth.getUser(accessToken);
+
+  if (authError || !user) {
+    return Response.json(
+      { error: "Your session expired. Please sign in again." },
+      { status: 401 },
+    );
+  }
+
+  const formData = await request.formData();
+  const jobTitle = String(formData.get("jobTitle") ?? "").trim();
+  const jobDescription = String(formData.get("jobDescription") ?? "").trim();
+  const resumeImage = formData.get("resumeImage");
+
+  if (!jobTitle || !jobDescription) {
+    return Response.json(
+      { error: "Job title and job description are required." },
+      { status: 400 },
+    );
+  }
+
+  if (!(resumeImage instanceof File)) {
+    return Response.json(
+      { error: "A resume image is required for analysis." },
+      { status: 400 },
+    );
+  }
+
+  try {
+    const feedback = await analyzeResumeWithOpenAI({
+      jobTitle,
+      jobDescription,
+      resumeImage,
+    });
+
+    return Response.json({ feedback });
+  } catch (error) {
+    return Response.json(
+      {
+        error:
+          error instanceof Error
+            ? error.message
+            : "OpenAI could not analyze the resume.",
+      },
+      { status: 502 },
+    );
+  }
+}
+
+function sanitizeFileName(fileName: string) {
+  return fileName.replace(/[^a-z0-9._-]/gi, "-").toLowerCase();
+}
+
+async function uploadToStorage(path: string, file: File) {
+  const { data, error } = await supabase.storage
+    .from(STORAGE_BUCKET)
+    .upload(path, file, {
+      contentType: file.type,
+    });
+
+  if (error) throw new Error(error.message);
+
+  return data.path;
 }
 
 export default function Upload() {
@@ -85,6 +171,111 @@ export default function Upload() {
     setFileError("");
   };
 
+  const handleAnalyze = async ({
+    companyName,
+    jobTitle,
+    jobDescription,
+    file,
+  }: {
+    companyName: string;
+    jobTitle: string;
+    jobDescription: string;
+    file: File;
+  }) => {
+    setIsProcessing(true);
+    setStatusText("");
+
+    try {
+      if (!user.email) {
+        throw new Error("Your account does not have an email address.");
+      }
+
+      const uuid = crypto.randomUUID();
+      const safeFileName = sanitizeFileName(file.name);
+      const basePath = `${user.id}/${uuid}`;
+      const resumePath = `${basePath}/${safeFileName}`;
+
+      setStatusText("Uploading the file...");
+      const uploadedResumePath = await uploadToStorage(resumePath, file);
+
+      setStatusText("Converting to image...");
+      const imageFile = await convertPdfToImage(file);
+
+      if (!imageFile.file) {
+        throw new Error(imageFile.error ?? "Failed to convert PDF to image.");
+      }
+
+      setStatusText("Uploading the image...");
+      const uploadedImagePath = await uploadToStorage(
+        `${basePath}/${sanitizeFileName(imageFile.file.name)}`,
+        imageFile.file,
+      );
+
+      setStatusText("Preparing data...");
+      const { error: insertError } = await supabase.from("resumes").insert({
+        id: uuid,
+        user_id: user.id,
+        user_email: user.email,
+        company_name: companyName,
+        job_title: jobTitle,
+        job_description: jobDescription,
+        resume_path: uploadedResumePath,
+        image_path: uploadedImagePath,
+        feedback: null,
+      });
+
+      if (insertError) throw new Error(insertError.message);
+
+      setStatusText("Analyzing...");
+      const {
+        data: { session },
+        error: sessionError,
+      } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        throw new Error("Your session expired. Please sign in again.");
+      }
+
+      const analysisFormData = new FormData();
+      analysisFormData.append("jobTitle", jobTitle);
+      analysisFormData.append("jobDescription", jobDescription);
+      analysisFormData.append("resumeImage", imageFile.file);
+
+      const analysisResponse = await fetch("/upload", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session.access_token}`,
+        },
+        body: analysisFormData,
+      });
+      const analysis = (await analysisResponse.json()) as AnalyzeActionResponse;
+
+      if (!analysisResponse.ok || "error" in analysis) {
+        throw new Error(
+          "error" in analysis ? analysis.error : "Failed to analyze resume.",
+        );
+      }
+
+      console.log("feedback:", analysis.feedback);
+
+      const { error: updateError } = await supabase
+        .from("resumes")
+        .update({ feedback: analysis.feedback })
+        .eq("id", uuid)
+        .eq("user_id", user.id);
+
+      if (updateError) throw new Error(updateError.message);
+
+      setStatusText("Analysis complete, redirecting...");
+      navigate(`/resume/${uuid}`);
+    } catch (error) {
+      setStatusText(
+        `Error: ${error instanceof Error ? error.message : "Something went wrong."}`,
+      );
+      setIsProcessing(false);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -97,6 +288,13 @@ export default function Upload() {
       setFileError("Please upload your resume as a PDF before continuing.");
       return;
     }
+
+    handleAnalyze({
+      companyName,
+      jobTitle,
+      jobDescription,
+      file,
+    });
   };
 
   return (
