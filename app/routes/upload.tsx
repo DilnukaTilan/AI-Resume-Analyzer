@@ -97,8 +97,6 @@ export default function Upload() {
       setFileError("Please upload your resume as a PDF before continuing.");
       return;
     }
-
-    console.log({ companyName, jobTitle, jobDescription, file });
   };
 
   return (

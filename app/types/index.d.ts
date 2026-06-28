@@ -14,6 +14,7 @@ interface Feedback {
     tips: {
       type: "good" | "improve";
       tip: string;
+      explanation: string;
     }[];
   };
   toneAndStyle: {
