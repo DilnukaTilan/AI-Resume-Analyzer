@@ -122,7 +122,7 @@ const FileUploader = ({
                 <img
                   src="/icons/info.svg"
                   alt="upload"
-                  className="size-14 sm:size-20"
+                  className="size-14 sm:size-20 transition-transform duration-300 hover:scale-105"
                 />
               </div>
               <p className="text-sm sm:text-base text-gray-500">
