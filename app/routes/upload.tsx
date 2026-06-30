@@ -9,6 +9,8 @@ import { supabase } from "~/lib/supabase";
 import FileUploader from "~/components/FileUploader";
 import { convertPdfToImage } from "~/lib/pdf2img";
 
+const STORAGE_BUCKET = "resumes";
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "Upload Resume | Resumind" },
@@ -19,12 +21,51 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const STORAGE_BUCKET = "resumes";
-
 type AnalyzeActionResponse = { feedback: Feedback } | { error: string };
 
 function sanitizeFileName(fileName: string) {
   return fileName.replace(/[^a-z0-9._-]/gi, "-").toLowerCase();
+}
+
+function getSafeErrorMessage(error: unknown): string {
+  if (!(error instanceof Error)) {
+    return "Something went wrong.";
+  }
+
+  const message = error.message;
+
+  const sensitivePatterns = [
+    /database/i,
+    /sql/i,
+    /postgres/i,
+    /relation/i,
+    /column/i,
+    /foreign key/i,
+    /violates/i,
+    /schema/i,
+    /supabase/i,
+    /key/i,
+    /token/i,
+    /jwt/i,
+    /authorization/i,
+    /fetch/i,
+    /network/i,
+    /connection/i,
+    /socket/i,
+    /http/i,
+    /url/i,
+    /sk-/i,
+  ];
+
+  const hasSensitiveInfo = sensitivePatterns.some((pattern) =>
+    pattern.test(message),
+  );
+
+  if (hasSensitiveInfo) {
+    return "An error occurred while analyzing your resume. Please try again.";
+  }
+
+  return message;
 }
 
 async function uploadToStorage(path: string, file: File) {
@@ -47,6 +88,7 @@ export default function Upload() {
   const [statusText, setStatusText] = useState("");
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState("");
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -119,6 +161,7 @@ export default function Upload() {
   }) => {
     setIsProcessing(true);
     setStatusText("");
+    setAnalysisError(null);
 
     try {
       if (!user.email) {
@@ -203,9 +246,8 @@ export default function Upload() {
       await new Promise((r) => setTimeout(r, 1500));
       navigate(`/resume/${uuid}`);
     } catch (error) {
-      setStatusText(
-        `Error: ${error instanceof Error ? error.message : "Something went wrong."}`,
-      );
+      console.error("Resume analysis failed:", error);
+      setAnalysisError(getSafeErrorMessage(error));
       setIsProcessing(false);
     }
   };
@@ -250,6 +292,43 @@ export default function Upload() {
             <h2>Drop your resume for an ATS score and improvement tips.</h2>
           )}
         </div>
+
+        {!isProcessing && analysisError && (
+          <div className="upload-error-banner">
+            <div className="upload-error-content">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="size-5"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-8-5a.75.75 0 0 1 .75.75v4.5a.75.75 0 0 1-1.5 0v-4.5A.75.75 0 0 1 10 5Zm0 10a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>{analysisError}</span>
+            </div>
+            <button
+              type="button"
+              className="upload-error-dismiss"
+              onClick={() => setAnalysisError(null)}
+              aria-label="Dismiss error"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="size-5"
+                aria-hidden="true"
+              >
+                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+              </svg>
+            </button>
+          </div>
+        )}
 
         {!isProcessing && (
           <div className="upload-panel">

@@ -101,7 +101,7 @@ export default function Home() {
         feedback: row.feedback,
       }));
 
-      setResumes(mapped);
+      setResumes(mapped.filter((r) => r.feedback !== null));
       setIsLoadingResumes(false);
     };
 
